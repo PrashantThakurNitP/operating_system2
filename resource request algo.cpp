@@ -1,0 +1,290 @@
+﻿
+//PRASHANT THAKUR
+//ROLL NO 1706001
+
+/* Question : Resouce Request Algorithm
+Consider a system with five processes P1-P5 and 3 resources of type R1,R2 and R3.
+Resource type R1 has 10 instances,R2 has 5 and R3 has 7 instances;
+Suppose at time t0 following snapshot of the system has been taken
+Process 	Allocation    Max 		 Available
+ P1 		0 1 0		 7 5 3             3 3 2
+ P2 		2 0 0		 3 2 2
+ P3 		3 0 2 	 9 0 2
+ P4 		2 1 1        2 2 2
+ P1 		0 0 2		 4 3 3
+// Is the system in a safe state ? if yes, then find safe sequence...
+// What will happen if process P2 request 1 additional instances of resources R1,0
+of R2 and 2 of type R3 ??*/
+
+
+#include<bits/stdc++.h>
+#include<vector>
+#include <algorithm>
+using namespace std;
+int n=3;//no of resources
+class data
+{
+	public:
+	vector<int> max1;
+	
+	vector<int> alloc;
+	vector<int> need;
+	
+   	void get_max1()
+   	{
+   		
+   		//cout<<"maximum  ";
+      		for(int i=0;i<n;i++)
+      		{
+      		int a1;
+      		cin>>a1;
+
+      		max1.push_back(a1);
+      		}
+		
+
+   	}
+   	void get_alloc()
+   	{
+   		//cout<<"allocation  ";
+   		
+	  		for(int i=0;i<n;i++)
+	  		{
+      			 	int a1;
+      				 cin>>a1;
+					alloc.push_back(a1);
+					
+	  		}
+		
+   	}
+   	void cal_need()
+   	{
+   		//cout<<"need  ";
+   	for(int i=0;i<n;i++)
+	 {
+	 	need.push_back(max1[i]-alloc[i]);
+	 	cout<<need[i]<<"  ";
+	 }
+   	}
+   	void disp_need()
+   	{
+   		//cout<<"need  ";
+   		for(int i=0;i<n;i++)
+	 {
+	 	cout<<need[i]<<"  ";
+	 }
+   	}
+   	int resource_request(vector<int> &request,vector<int> &available)
+   	{
+   		cout<<"RESOURCE REQUEST ALGORITHM";
+   		int flag=0;
+   		
+   		for(int i=0;i<n;i++)
+   		{
+   			if(request[i]>need[i])
+   			{
+   				flag=1;
+   				break;
+   			}
+   		}
+
+   		if(flag)
+   		{
+   			cout<<"\nError as request > = need";
+   			return 1;
+   		}
+   		
+   		int flag1=0;
+   			for(int i=0;i<n;i++)
+   			{
+   				if(available[i]<request[i])
+   				{
+   				  flag1=1;
+   				   break;
+   				}
+   			}
+   			if(flag1)
+   			{
+   				cout<<"\nWait as request>=avilable\n";
+   				return 0;
+   			}
+   			else
+   			{
+   				cout<<"\nlet us fulfill demand\n";
+   				cout<<"\nnow checking for safe sequence\n";
+   				for(int i=0;i<n;i++)
+   					available[i]=available[i]-request[i];
+   				for(int i=0;i<n;i++)
+   					alloc[i]=alloc[i]+request[i];
+   				for(int i=0;i<n;i++)
+   					need[i]=need[i]-request[i];
+   				//succesfully updated
+             return 1;
+   			}
+   	}
+ 	
+};
+
+int main()
+{
+
+	vector<int> total(n);
+	vector<int> total_allocated(n,0);//total no of process allocated
+	
+	cout<<"Enter total resorces ";
+	for(int i=0;i<n;i++)
+		cin>>total[i];
+	cout<<"Enter total no of process ";
+	int m;
+	cin>>m;//no of process
+	vector<data>process(m);
+	
+	cout<<"Enter max ,process allocated  "<<endl;
+	cout<<"Maximum\n";
+	for(int j=0;j<m;j++)
+		process[j].get_max1();//calling function
+	cout<<"Allocated\n ";
+    for(int j=0;j<m;j++)
+    	process[j].get_alloc();//calling function
+    
+		
+
+
+
+cout<<"Need\n";
+	 for(int j=0;j<m;j++)
+  {
+	 process[j].cal_need();
+	 cout<<endl;
+		
+	}
+   for(int j=0;j<m;j++)
+   {
+   	 for(int i=0;i<n;i++)
+   	 	total_allocated[i]+=process[j].alloc[i];
+
+   }
+   cout<<"Total allocated are ";
+   for(int i=0;i<n;i++)
+	  cout<<total_allocated[i]<<" ";
+   cout<<endl;
+
+   vector<int>available;
+   for(int i=0;i<n;i++)
+        available.push_back(total[i]-total_allocated[i]);//available calculated
+    cout<<"Total available  are ";
+   for(int i=0;i<n;i++)
+	  cout<<available[i]<<" ";
+   cout<<endl;
+
+
+
+	//taking request request algorithm
+   cout<<"enter request vector ";
+   vector<int >request(n,0);
+   for(int i=0;i<n;i++)
+   {
+      cin>>request[i];
+   }
+   /*****************************************************/
+   cout<<"enter process no which has requested p1-p"<<n<<"  ";
+   int process_no;    cin>>process_no;  process_no-=1;//adjustment as our process no start from 1
+   //calling resorces request algo
+  // process[process_no].resource_request(request,available);
+/*****************************************************************/
+
+	
+	int count=0;     int count2=0;
+	vector<int> safe;
+	bool safe_seq=1;//intialize whether safe sequnce or not
+    bool status=0;//whether rquest satisfied or not
+	for(int j=0;j<=m;j++)
+	{  
+
+          if(std::count(safe.begin(),safe.end(),j+1)>0 && j>=m-1)
+			j=0;//process has been completed and it is prsent at last in list 
+		//hence move to first to check again
+		 if(std::count(safe.begin(),safe.end(),j+1)>0 && j<=m-1)
+			continue;//already this process has been completed hence move to next process
+
+
+		/**************************************************/
+         //calling resorces request algo
+		
+      if(!status)//status is 1 if either we cannot fulfill demand or demand already fulfilled 
+
+      {
+
+        //status 1 means no need to enter this block 
+          status=process[process_no].resource_request(request,available);
+          cout<<"Need after fulfilling request \n";
+          for(int u=0;u<m;u++)
+       			{ process[u].disp_need();   cout<<endl; }
+       	
+       	
+       		//for(int u=0;u<m;u++)
+
+       }
+        cout<<"\nAvailable resources are   ";
+         for(int u=0;u<n;u++)
+       		cout<<available[u]<<" ";
+   /********************************************************/
+       //continue with bankers algorithm
+		
+		count2+=1;//denote no unsuccesful pass
+		if(count2>m)
+		{
+			safe_seq=0;
+			cout<<"Not safe squence"<<endl;
+			cout<<"Cannot give to process as after fulfining request safe sequence not generated";
+			exit(0);
+		}
+		//flag2=0;
+	    int flag3=1;
+	    for(int i=0;i<n;i++)
+		{
+           if(available[i]<process[j].need[i])
+           {
+           	flag3=0;//itereate on all items
+           	break;
+           }
+		}
+		
+		   if(flag3)
+		   {
+		     count2=0;//reinitialize count2, coint2 denote no of unsuccesful pass
+		     cout<<"\n  process P "<<j+1<<" allocated"<<endl;
+		     safe.push_back(j+1);
+		     count+=1;//count denote no of process complete 
+		     }
+
+			if(flag3)
+			{
+				
+				for(int i=0;i<n;i++)
+		  		{
+		     		//available[i]=total[i]-total_allocated[i];
+					available[i]=available[i]+process[j].alloc[i];
+					//cout<<available[i]<<"  ";
+
+		   		}
+			}
+		     if(count==m)
+		     	{
+		     		cout<<"\n  total process completed"<<endl;
+		     		safe_seq=1;
+		     		break;
+		     	}
+
+		     
+		if(count<m && count2<m && j==m-1)
+			j=-1;//go to begining ie p1 ie (in actual p0 but we consider it as p1)
+		
+	}
+	if(safe_seq)
+	{
+	    cout<<"Safe sequence is  ";
+	   for(int i=0;i<m;i++)
+		cout<<"P"<<safe[i]<<" ";
+	}
+}

@@ -1,0 +1,60 @@
+prashant@notebook:~/Desktop/scheduling algo$ g++ resource\ request\ algo.cpp
+prashant@notebook:~/Desktop/scheduling algo$ ./a.out
+Enter total resorces 10 5 7
+Enter total no of process 5
+Enter max ,process allocated  
+Maximum
+7 5 3
+3 2 2
+9 0 2
+2 2 2
+4 3 3
+Allocated
+ 0 1 0
+2 0 0
+3 0 2
+2 1 1
+0 0 2
+Need
+7  4  3  
+1  2  2  
+6  0  0  
+0  1  1  
+4  3  1  
+Total allocated are 7 2 5 
+Total available  are 3 3 2 
+enter request vector 1 0 2
+enter process no which has requested p1-p3  2
+RESOURCE REQUEST ALGORITHM
+let us fulfill demand
+
+now checking for safe sequence
+Need after fulfilling request 
+7  4  3  
+0  2  0  
+6  0  0  
+0  1  1  
+4  3  1  
+
+Available resources are   2 3 0 
+Available resources are   2 3 0 
+  process P 2 allocated
+
+Available resources are   5 3 2 
+Available resources are   5 3 2 
+  process P 4 allocated
+
+Available resources are   7 4 3 
+  process P 5 allocated
+
+Available resources are   7 4 5 
+  process P 1 allocated
+
+Available resources are   7 5 5 
+  process P 3 allocated
+
+  total process completed
+Safe sequence is  P2 P4 P5 P1 P3 
+prashant@notebook:~/Desktop/scheduling algo$ 
+
+
